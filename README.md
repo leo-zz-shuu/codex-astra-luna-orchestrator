@@ -1,7 +1,7 @@
 # Codex Sol/Astra Orchestrator + Luna Subagents
 
 Install a Codex profile with GPT-6 Astra, GPT-6.1 Sol, or GPT-6 Luna as the orchestrator,
-GPT-6 Luna execution subagents, and an independent reviewer.
+GPT-6 Luna execution subagents or the local Claude Code CLI, and an independent reviewer.
 
 The Sol profiles use `gpt-6.1-sol` for both the orchestrator and reviewer.
 
@@ -68,7 +68,7 @@ the reviewer uses Astra for Pro/Plus and Sol for Sol profiles.
 
    ```text
    Target repository path: ../my-project
-   Select Profile [1-6] (default 1): 5
+   Select Profile [1-7] (default 1): 5
    ```
 
 The installer copies the selected configuration to `.codex/`, its skill to
@@ -133,8 +133,9 @@ The skill keeps the `astra-orchestrator` name in every profile so the shared
 | 4 | `plus-max-2-subagents` | Luna max | Luna medium | Astra low | 2 |
 | 5 | `GPT6-SolMax-LunaMax` | Sol max | Luna max | Sol max | 4 |
 | 6 | `GPT6-SolMedium-LunaMax` | Sol medium | Luna max | Sol medium | 4 |
+| 7 | `GPT6-Sol-Claude` | Sol (reasoning effort from user configuration) | Local Claude Code CLI | Sol (reasoning effort from user configuration) | 4 |
 
-All models above are GPT-6. Execution roles are explorer, worker, tester,
+Profiles 1–6 use GPT-6 models. Their execution roles are explorer, worker, tester,
 and researcher; named roles pin their models and reasoning levels independently
 of the default subagent settings. Each ready-to-copy profile lives under
 `profiles/<profile>/`.
@@ -157,7 +158,8 @@ settings.
 │   ├── pro-max-2-subagents/
 │   ├── plus-max-2-subagents/
 │   ├── GPT6-SolMax-LunaMax/
-│   └── GPT6-SolMedium-LunaMax/
+│   ├── GPT6-SolMedium-LunaMax/
+│   └── GPT6-Sol-Claude/
 ├── guides/
 ├── scripts/
 │   └── token_usage.py
@@ -173,6 +175,20 @@ settings.
 
 Each profile contains `codex/config.toml`, `codex/agents/*.toml`, and
 `agents/skills/astra-orchestrator/SKILL.md`.
+
+### Sol + local Claude Code profile
+
+Profile 7 (`GPT6-Sol-Claude`) uses GPT-6.1 Sol for planning, integration, and
+review, with reasoning effort left to the user's Codex configuration. It runs
+bounded implementation tasks with the local Claude Code CLI in a dedicated Git
+worktree. Install Claude Code and
+configure its Provider and credentials locally before using this profile. The
+executor uses the model selected by Claude Code's local settings by default;
+`CLAUDE_EXECUTOR_MODEL` optionally overrides it with any model ID supported by
+that Provider (for example, `deepseek-v4-flash`). `CLAUDE_EXECUTOR_BIN` can
+override the CLI executable path. The executor does not alter your Claude
+settings, create commits, or merge changes. Sol reviews the worktree diff and
+acceptance results before integration.
 
 ## Guides
 

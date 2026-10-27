@@ -58,9 +58,10 @@ function Read-Plan {
     [Console]::WriteLine('  4) Plus (max 2 subagents) - GPT-6 Luna (max) orchestrates, GPT-6 Luna (medium) executes, GPT-6 Astra (low) reviews')
     [Console]::WriteLine('  5) GPT6-SolMax-LunaMax - GPT-6.1 Sol (max) orchestrates and reviews, GPT-6 Luna (max) executes')
     [Console]::WriteLine('  6) GPT6-SolMedium-LunaMax - GPT-6.1 Sol (medium) orchestrates and reviews, GPT-6 Luna (max) executes')
+    [Console]::WriteLine('  7) GPT6-Sol-Claude - GPT-6.1 Sol (user-configured reasoning) orchestrates and reviews, Claude Code executes in a worktree')
 
     while ($true) {
-        [Console]::Write('Select Profile [1-6] (default 1): ')
+        [Console]::Write('Select Profile [1-7] (default 1): ')
         $answer = [Console]::In.ReadLine()
         if ($null -eq $answer) {
             throw 'Input ended before setup was complete.'
@@ -80,6 +81,8 @@ function Read-Plan {
             'gpt6-solmax-lunamax' { return 'GPT6-SolMax-LunaMax' }
             '6' { return 'GPT6-SolMedium-LunaMax' }
             'gpt6-solmedium-lunamax' { return 'GPT6-SolMedium-LunaMax' }
+            '7' { return 'GPT6-Sol-Claude' }
+            'gpt6-sol-claude' { return 'GPT6-Sol-Claude' }
             default { [Console]::WriteLine('Please enter a listed profile number or name.') }
         }
     }
