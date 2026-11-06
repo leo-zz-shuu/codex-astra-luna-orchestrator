@@ -59,9 +59,11 @@ function Read-Plan {
     [Console]::WriteLine('  5) GPT6-SolMax-LunaMax - GPT-6.1 Sol (max) orchestrates and reviews, GPT-6 Luna (max) executes')
     [Console]::WriteLine('  6) GPT6-SolMedium-LunaMax - GPT-6.1 Sol (medium) orchestrates and reviews, GPT-6 Luna (max) executes')
     [Console]::WriteLine('  7) GPT6-Sol-Claude - GPT-6.1 Sol (user-configured reasoning) orchestrates and reviews, Claude Code executes in a worktree')
+    [Console]::WriteLine('  8) GPT6-SolMax-Sol56Max - GPT-6.1 Sol (max) orchestrates and reviews, GPT-5.6 Sol (max) executes')
+    [Console]::WriteLine('  9) GPT6-SolMax-Terra56Max - GPT-6.1 Sol (max) orchestrates and reviews, GPT-5.6 Terra (max) executes')
 
     while ($true) {
-        [Console]::Write('Select Profile [1-7] (default 1): ')
+        [Console]::Write('Select Profile [1-9] (default 1): ')
         $answer = [Console]::In.ReadLine()
         if ($null -eq $answer) {
             throw 'Input ended before setup was complete.'
@@ -83,6 +85,10 @@ function Read-Plan {
             'gpt6-solmedium-lunamax' { return 'GPT6-SolMedium-LunaMax' }
             '7' { return 'GPT6-Sol-Claude' }
             'gpt6-sol-claude' { return 'GPT6-Sol-Claude' }
+            '8' { return 'GPT6-SolMax-Sol56Max' }
+            'gpt6-solmax-sol56max' { return 'GPT6-SolMax-Sol56Max' }
+            '9' { return 'GPT6-SolMax-Terra56Max' }
+            'gpt6-solmax-terra56max' { return 'GPT6-SolMax-Terra56Max' }
             default { [Console]::WriteLine('Please enter a listed profile number or name.') }
         }
     }

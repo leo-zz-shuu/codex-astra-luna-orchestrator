@@ -127,9 +127,11 @@ select_plan() {
     printf '%s\n' '  5) GPT6-SolMax-LunaMax - GPT-6.1 Sol (max) orchestrates and reviews, GPT-6 Luna (max) executes'
     printf '%s\n' '  6) GPT6-SolMedium-LunaMax - GPT-6.1 Sol (medium) orchestrates and reviews, GPT-6 Luna (max) executes'
     printf '%s\n' '  7) GPT6-Sol-Claude - GPT-6.1 Sol (user-configured reasoning) orchestrates and reviews, Claude Code executes in a worktree'
+    printf '%s\n' '  8) GPT6-SolMax-Sol56Max - GPT-6.1 Sol (max) orchestrates and reviews, GPT-5.6 Sol (max) executes'
+    printf '%s\n' '  9) GPT6-SolMax-Terra56Max - GPT-6.1 Sol (max) orchestrates and reviews, GPT-5.6 Terra (max) executes'
 
     while :; do
-        printf '%s' 'Select Profile [1-7] (default 1): '
+        printf '%s' 'Select Profile [1-9] (default 1): '
         if ! IFS= read -r answer; then
             printf '\nSetup cancelled: input ended before setup was complete.\n' >&2
             exit 1
@@ -143,6 +145,8 @@ select_plan() {
             5|gpt6-SolMax-LunaMax|GPT6-SolMax-LunaMax) plan=GPT6-SolMax-LunaMax; return ;;
             6|gpt6-SolMedium-LunaMax|GPT6-SolMedium-LunaMax) plan=GPT6-SolMedium-LunaMax; return ;;
             7|gpt6-Sol-Claude|GPT6-Sol-Claude) plan=GPT6-Sol-Claude; return ;;
+            8|gpt6-SolMax-Sol56Max|GPT6-SolMax-Sol56Max) plan=GPT6-SolMax-Sol56Max; return ;;
+            9|gpt6-SolMax-Terra56Max|GPT6-SolMax-Terra56Max) plan=GPT6-SolMax-Terra56Max; return ;;
             *) printf '%s\n' 'Please enter a listed profile number or name.' ;;
         esac
     done

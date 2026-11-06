@@ -8,8 +8,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILES = {
-    "GPT6-SolMax-LunaMax": "max",
-    "GPT6-SolMedium-LunaMax": "medium",
+    "GPT6-SolMax-LunaMax": ("gpt-6-luna", "GPT-6 Luna", "max"),
+    "GPT6-SolMedium-LunaMax": ("gpt-6-luna", "GPT-6 Luna", "medium"),
+    "GPT6-SolMax-Sol56Max": ("gpt-5.6-sol", "GPT-5.6 Sol", "max"),
+    "GPT6-SolMax-Terra56Max": ("gpt-5.6-terra", "GPT-5.6 Terra", "max"),
 }
 LUNA_ROLES = ("explorer", "researcher", "tester", "worker")
 PREVIOUS_PROFILES = {
@@ -22,7 +24,7 @@ PREVIOUS_PROFILES = {
 
 class SolProfileTests(unittest.TestCase):
     def test_profile_models_and_roles(self):
-        for profile, effort in PROFILES.items():
+        for profile, (execution_model, execution_display, effort) in PROFILES.items():
             with self.subTest(profile=profile):
                 directory = ROOT / "profiles" / profile
                 config = tomllib.loads((directory / "codex" / "config.toml").read_text())
@@ -30,7 +32,7 @@ class SolProfileTests(unittest.TestCase):
                 self.assertEqual(config["model_reasoning_effort"], effort)
                 self.assertEqual(config["sandbox_mode"], "workspace-write")
                 self.assertTrue(config["agents"]["enabled"])
-                self.assertEqual(config["agents"]["default_subagent_model"], "gpt-6-luna")
+                self.assertEqual(config["agents"]["default_subagent_model"], execution_model)
                 self.assertEqual(config["agents"]["default_subagent_reasoning_effort"], "max")
                 self.assertEqual(config["agents"]["max_concurrent_threads_per_session"], 4)
                 for role in LUNA_ROLES:
@@ -38,7 +40,7 @@ class SolProfileTests(unittest.TestCase):
                         (directory / "codex" / "agents" / f"{role}.toml").read_text()
                     )
                     self.assertEqual(agent["name"], role)
-                    self.assertEqual(agent["model"], "gpt-6-luna")
+                    self.assertEqual(agent["model"], execution_model)
                     self.assertEqual(agent["model_reasoning_effort"], "max")
                     expected_mode = "workspace-write" if role in ("worker", "tester") else "read-only"
                     self.assertEqual(agent["sandbox_mode"], expected_mode)
@@ -53,9 +55,10 @@ class SolProfileTests(unittest.TestCase):
                 ).read_text()
                 self.assertIn(f"root: `gpt-6.1-sol` at `{effort}` reasoning", skill)
                 self.assertIn(
-                    "explorer, worker, tester, researcher: `gpt-6-luna` at `max` reasoning",
+                    f"explorer, worker, tester, researcher: `{execution_model}` at `max` reasoning",
                     skill,
                 )
+                self.assertIn(execution_display, skill)
 
     def test_installers_select_profiles(self):
         installers = [("shell", ["sh", str(ROOT / "setup.sh")])]
@@ -68,6 +71,10 @@ class SolProfileTests(unittest.TestCase):
             ("GPT6-SolMedium-LunaMax", "GPT6-SolMedium-LunaMax"),
             ("gpt6-SolMax-LunaMax", "GPT6-SolMax-LunaMax"),
             ("gpt6-SolMedium-LunaMax", "GPT6-SolMedium-LunaMax"),
+            ("8", "GPT6-SolMax-Sol56Max"),
+            ("9", "GPT6-SolMax-Terra56Max"),
+            ("gpt6-SolMax-Sol56Max", "GPT6-SolMax-Sol56Max"),
+            ("gpt6-SolMax-Terra56Max", "GPT6-SolMax-Terra56Max"),
         )
         for installer, command in installers:
             for choice, profile in choices:
@@ -76,7 +83,7 @@ class SolProfileTests(unittest.TestCase):
                         command, input=f"{target}\n{choice}\n\n\n\n", text=True, capture_output=True
                     )
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                    self.assertIn("Select Profile [1-6] (default 1):", result.stdout)
+                    self.assertIn("Select Profile [1-9] (default 1):", result.stdout)
                     self.assertIn(f"profile: {profile}", result.stdout)
                     self.assertIn(f") {profile} -", result.stdout)
                     source = ROOT / "profiles" / profile

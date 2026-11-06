@@ -1,7 +1,8 @@
 # Codex Sol/Astra Orchestrator + Luna Subagents
 
 Install a Codex profile with GPT-6 Astra, GPT-6.1 Sol, or GPT-6 Luna as the orchestrator,
-GPT-6 Luna execution subagents or the local Claude Code CLI, and an independent reviewer.
+GPT-6 Luna or GPT-5.6 execution subagents, or the local Claude Code CLI, and an
+independent reviewer.
 
 The Sol profiles use `gpt-6.1-sol` for both the orchestrator and reviewer.
 
@@ -68,7 +69,7 @@ the reviewer uses Astra for Pro/Plus and Sol for Sol profiles.
 
    ```text
    Target repository path: ../my-project
-   Select Profile [1-7] (default 1): 5
+   Select Profile [1-9] (default 1): 5
    ```
 
 The installer copies the selected configuration to `.codex/`, its skill to
@@ -134,10 +135,13 @@ The skill keeps the `astra-orchestrator` name in every profile so the shared
 | 5 | `GPT6-SolMax-LunaMax` | Sol max | Luna max | Sol max | 4 |
 | 6 | `GPT6-SolMedium-LunaMax` | Sol medium | Luna max | Sol medium | 4 |
 | 7 | `GPT6-Sol-Claude` | Sol (reasoning effort from user configuration) | Local Claude Code CLI | Sol (reasoning effort from user configuration) | 4 |
+| 8 | `GPT6-SolMax-Sol56Max` | Sol max | GPT-5.6 Sol max | Sol max | 4 |
+| 9 | `GPT6-SolMax-Terra56Max` | Sol max | GPT-5.6 Terra max | Sol max | 4 |
 
-Profiles 1–6 use GPT-6 models. Their execution roles are explorer, worker, tester,
-and researcher; named roles pin their models and reasoning levels independently
-of the default subagent settings. Each ready-to-copy profile lives under
+Profiles 1–6 use GPT-6 models. Profiles 8–9 use GPT-5.6 execution models. Their
+execution roles are explorer, worker, tester, and researcher; named roles pin
+their models and reasoning levels independently of the default subagent
+settings. Each ready-to-copy profile lives under
 `profiles/<profile>/`.
 
 For manual project setup, copy the selected profile's `codex/` and `agents/`
@@ -159,6 +163,8 @@ settings.
 │   ├── plus-max-2-subagents/
 │   ├── GPT6-SolMax-LunaMax/
 │   ├── GPT6-SolMedium-LunaMax/
+│   ├── GPT6-SolMax-Sol56Max/
+│   ├── GPT6-SolMax-Terra56Max/
 │   └── GPT6-Sol-Claude/
 ├── guides/
 ├── scripts/
@@ -189,6 +195,14 @@ that Provider (for example, `deepseek-v4-flash`). `CLAUDE_EXECUTOR_BIN` can
 override the CLI executable path. The executor does not alter your Claude
 settings, create commits, or merge changes. Sol reviews the worktree diff and
 acceptance results before integration.
+
+### Sol + GPT-5.6 execution profiles
+
+Profiles 8 and 9 use GPT-6.1 Sol at max reasoning for orchestration and review.
+Profile `GPT6-SolMax-Sol56Max` uses `gpt-5.6-sol` at max reasoning for the
+explorer, worker, tester, and researcher roles. Profile `GPT6-SolMax-Terra56Max`
+uses `gpt-5.6-terra` at max reasoning for those roles. The reviewer remains
+`gpt-6.1-sol` at max reasoning in both profiles.
 
 ## Guides
 

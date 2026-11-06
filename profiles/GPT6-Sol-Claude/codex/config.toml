@@ -4,6 +4,6 @@ sandbox_mode = "workspace-write"
 
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 4
+max_concurrent_threads_per_session = 10
 default_subagent_model = "gpt-6-luna"
 default_subagent_reasoning_effort = "max"
